@@ -1,14 +1,11 @@
-import Test from "@/components/TestServer";
-import Image from "next/image";
-
 export default function HomePage() {
     return (
         <main className='mt-24'>
-            {/* <Image src='/bg.png' alt='Mountains and forests with two cabins' /> */}
+            <img src='/bg.png' alt='Mountains and forests with two cabins' />
 
             <div className='relative z-10 text-center'>
                 <h1 className='text-8xl text-primary-50 mb-10 tracking-tight font-normal'>
-                    Welcome&#39; to paradise.
+                    Welcome to paradise.
                 </h1>
                 <a
                     href='/cabins'
@@ -17,7 +14,6 @@ export default function HomePage() {
                     Explore luxury cabins
                 </a>
             </div>
-            <Test />
         </main>
     );
 }
