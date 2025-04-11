@@ -1,0 +1,8 @@
+@import "tailwindcss";
+@import "./theme.css";
+@import "./utilities.css";
+@import "./components.css";
+
+body {
+    color: var(--color-gray-50);
+}

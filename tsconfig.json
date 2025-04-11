@@ -23,7 +23,8 @@
             "@/*": ["./*"],
             "@components": ["components/*"],
             "@lib": ["lib/*"],
-            "@data": ["data/*"]
+            "@data": ["data/*"],
+            "@types": ["types/*"]
         }
     },
     "include": [
@@ -31,7 +32,8 @@
         "**/*.ts",
         "**/*.tsx",
         ".next/types/**/*.ts",
-        "components/Test"
+        "components/Test",
+        "tailwind.config.ts"
     ],
     "exclude": ["node_modules"]
 }

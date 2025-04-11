@@ -1,12 +1,11 @@
 export { default as CabinCard } from "./CabinCard";
+export { default as CabinsList } from "./CabinsList";
 export { default as DateSelector } from "./DateSelector";
 export { default as DeleteReservation } from "./DeleteReservation";
-export { default as Error } from "./Error";
 export { default as Header } from "./Header";
 export { default as LoginMessage } from "./LoginMessage";
 export { default as Logo } from "./Logo";
 export { default as Navigation } from "./Navigation";
-export { default as NotFound } from "./NotFound";
 export { default as Price } from "./Price";
 export { default as ReservationCard } from "./ReservationCard";
 export { default as ReservationForm } from "./ReservationForm";

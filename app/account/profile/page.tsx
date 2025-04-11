@@ -1,8 +1,14 @@
-import SelectCountry from "@/components/SelectCountry";
+import { SelectCountry } from "@/components";
+import Image from "next/image";
+import React from "react";
 
-export default function Page() {
+export const metadata = {
+    title: " | Profile",
+};
+
+const ProfilePage = () => {
     // CHANGE
-    const countryFlag = "pt.jpg";
+    const countryFlag = "/pt.svg";
     const nationality = "portugal";
 
     return (
@@ -36,7 +42,9 @@ export default function Page() {
                 <div className='space-y-2'>
                     <div className='flex items-center justify-between'>
                         <label htmlFor='nationality'>Where are you from?</label>
-                        <img
+                        <Image
+                            width={20}
+                            height={20}
                             src={countryFlag}
                             alt='Country flag'
                             className='h-5 rounded-sm'
@@ -67,4 +75,6 @@ export default function Page() {
             </form>
         </div>
     );
-}
+};
+
+export default ProfilePage;

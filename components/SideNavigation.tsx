@@ -22,7 +22,7 @@ const navLinks = [
 
 function SideNavigation() {
     return (
-        <nav className='border-r border-primary-900'>
+        <nav className='h-full border-r border-primary-900'>
             <ul className='flex flex-col gap-2 h-full text-lg'>
                 {navLinks.map((link) => (
                     <li key={link.name}>

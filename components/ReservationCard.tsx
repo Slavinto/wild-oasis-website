@@ -1,32 +1,34 @@
+import Image from "next/image";
+import { format, formatDistance, isPast, isToday, parseISO } from "date-fns";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
 
-import { format, formatDistance, isPast, isToday, parseISO } from "date-fns";
-import DeleteReservation from "./DeleteReservation";
+import { DeleteReservation } from "@/components";
+import { TBookingWithCabin } from "@/data/types";
 
-export const formatDistanceFromNow = (dateStr) =>
+export const formatDistanceFromNow = (dateStr: string) =>
     formatDistance(parseISO(dateStr), new Date(), {
         addSuffix: true,
     }).replace("about ", "");
 
-function ReservationCard({ booking }) {
+function ReservationCard({ booking }: { booking: TBookingWithCabin }) {
     const {
         id,
-        guestId,
-        startDate,
-        endDate,
-        numNights,
-        totalPrice,
-        numGuests,
-        status,
+        // guest_id,
+        start_date,
+        end_date,
+        number_of_nights,
+        total_price,
+        number_of_guests,
+        // status,
         created_at,
-        cabins: { name, image },
+        cabins: { name, image_url },
     } = booking;
 
     return (
         <div className='flex border border-primary-800'>
             <div className='relative h-32 aspect-square'>
-                <img
-                    src={image}
+                <Image
+                    src={image_url || ""}
                     alt={`Cabin ${name}`}
                     className='object-cover border-r border-primary-800'
                 />
@@ -35,9 +37,9 @@ function ReservationCard({ booking }) {
             <div className='flex-grow px-6 py-3 flex flex-col'>
                 <div className='flex items-center justify-between'>
                     <h3 className='text-xl font-semibold'>
-                        {numNights} nights in Cabin {name}
+                        {number_of_nights} nights in Cabin {name}
                     </h3>
-                    {isPast(new Date(startDate)) ? (
+                    {isPast(new Date(start_date || "")) ? (
                         <span className='bg-yellow-800 text-yellow-200 h-7 px-3 uppercase text-xs font-bold flex items-center rounded-sm'>
                             past
                         </span>
@@ -49,20 +51,22 @@ function ReservationCard({ booking }) {
                 </div>
 
                 <p className='text-lg text-primary-300'>
-                    {format(new Date(startDate), "EEE, MMM dd yyyy")} (
-                    {isToday(new Date(startDate))
+                    {format(new Date(start_date || ""), "EEE, MMM dd yyyy")} (
+                    {isToday(new Date(start_date || ""))
                         ? "Today"
-                        : formatDistanceFromNow(startDate)}
-                    ) &mdash; {format(new Date(endDate), "EEE, MMM dd yyyy")}
+                        : formatDistanceFromNow(start_date || "")}
+                    ) &mdash;{" "}
+                    {format(new Date(end_date || ""), "EEE, MMM dd yyyy")}
                 </p>
 
                 <div className='flex gap-5 mt-auto items-baseline'>
                     <p className='text-xl font-semibold text-accent-400'>
-                        ${totalPrice}
+                        ${total_price}
                     </p>
                     <p className='text-primary-300'>&bull;</p>
                     <p className='text-lg text-primary-300'>
-                        {numGuests} guest{numGuests > 1 && "s"}
+                        {number_of_guests} guest
+                        {(number_of_guests ?? 0) > 1 && "s"}
                     </p>
                     <p className='ml-auto text-sm text-primary-400'>
                         Booked{" "}

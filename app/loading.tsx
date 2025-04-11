@@ -1,7 +1,8 @@
 import React from "react";
+import { Spinner } from "@/components";
 
 const Loading = () => {
-    return <h1>Loading data...</h1>;
+    return <Spinner />;
 };
 
 export default Loading;

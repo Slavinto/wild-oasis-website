@@ -7,3 +7,7 @@ export interface ICountry {
 export interface ICabin {
     id: string;
 }
+
+export interface IBooking {
+    id: string;
+}

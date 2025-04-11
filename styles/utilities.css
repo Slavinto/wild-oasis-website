@@ -1,0 +1,5 @@
+@layer utilities {
+    .test {
+        @apply w-[1000px];
+    }
+}
