@@ -16,7 +16,7 @@ export default async function AboutPage() {
 
     return (
         <div className='lg:px-0 grid grid-cols-1 lg:grid-cols-5 gap-x-24 gap-y-32 text-lg items-center'>
-            <div className='col-span-3'>
+            <div className='lg:col-span-3'>
                 <h1 className='text-4xl mb-10 text-accent-400 font-medium'>
                     Welcome to The Wild Oasis
                 </h1>
@@ -46,10 +46,10 @@ export default async function AboutPage() {
                 </div>
             </div>
 
-            <div className='col-span-2 relative max-lg:row-start-1 max-lg:row-end-2 aspect-square max-lg:aspect-video'>
+            <div className='lg:col-span-2 relative max-lg:row-start-1 max-lg:row-end-2 aspect-square max-lg:aspect-video max-lg:justify-center'>
                 <Image
                     placeholder='blur'
-                    className='object-contain'
+                    className='object-cover'
                     quality={80}
                     src={about1}
                     fill
@@ -57,10 +57,10 @@ export default async function AboutPage() {
                 />
             </div>
 
-            <div className='col-span-2 relative aspect-square'>
+            <div className='lg:col-span-2 relative aspect-square max-lg:aspect-video'>
                 <Image
                     placeholder='blur'
-                    className='object-contain'
+                    className='object-cover'
                     quality={80}
                     src={about2}
                     fill
@@ -68,7 +68,7 @@ export default async function AboutPage() {
                 />
             </div>
 
-            <div className='col-span-3'>
+            <div className='lg:col-span-3'>
                 <h1 className='text-4xl mb-10 text-accent-400 font-medium'>
                     Managed by our family since 1962
                 </h1>

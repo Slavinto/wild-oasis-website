@@ -1,28 +1,32 @@
-import { CabinsList, Spinner } from "@/components";
+import { CabinsList, CabinCapacityFilter, Spinner } from "@/components";
+import { cabinPageText } from "@/data/pagesTextContent";
+import { SearchParams } from "@/data/types";
 import { Suspense } from "react";
 
-export const revalidate = 3600;
+// export const revalidate = 3600;
 
 export const metadata = {
     title: "The Wild Oasis | Cabins",
 };
 
-export default function CabinPage() {
+export default async function CabinPage({
+    searchParams,
+}: {
+    searchParams: SearchParams;
+}) {
+    const filters = await searchParams;
+    console.log(JSON.stringify(filters));
     return (
-        <div>
+        <div className='flex flex-col w-full'>
             <h1 className='text-4xl mb-5 text-accent-400 font-medium'>
-                Our Luxury Cabins
+                {cabinPageText.heading}
             </h1>
             <p className='text-primary-200 font-secondary text-lg mb-10'>
-                Cozy yet luxurious cabins, located right in the heart of the
-                Italian Dolomites. Imagine waking up to beautiful mountain
-                views, spending your days exploring the dark forests around, or
-                just relaxing in your private hot tub under the stars. Enjoy
-                nature&#39;s beauty in your own little home away from home. The
-                perfect spot for a peaceful, calm vacation. Welcome to paradise.
+                {cabinPageText.description}
             </p>
-            <Suspense fallback={<Spinner />}>
-                <CabinsList />
+            <CabinCapacityFilter />
+            <Suspense key={JSON.stringify(filters)} fallback={<Spinner />}>
+                <CabinsList filters={filters} />
             </Suspense>
         </div>
     );

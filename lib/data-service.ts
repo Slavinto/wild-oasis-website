@@ -1,15 +1,18 @@
 import { eachDayOfInterval } from "date-fns";
+import { notFound } from "next/navigation";
+
 import { supabaseServer } from "./supabase/server";
 import { Tables } from "@/data/supabaseTypes";
 import { TCabin, TCabinPrice } from "@/data/types";
-import { notFound } from "next/navigation";
+import { CabinsFilter } from "@/data/interfaces";
+import { CabinCapacity, ProjectTables } from "@/data/enums";
 
 /////////////
 // GET
 
 export async function getCabin(id: number) {
     const { data, error } = await supabaseServer
-        .from("cabins")
+        .from(ProjectTables.Cabins)
         .select("*")
         .eq("id", id)
         .single();
@@ -27,7 +30,7 @@ export async function getCabin(id: number) {
 
 export async function getCabinPrice(id: number): Promise<TCabinPrice> {
     const { data, error } = await supabaseServer
-        .from("cabins")
+        .from(ProjectTables.Cabins)
         .select("regular_price, discount")
         .eq("id", id)
         .single();
@@ -42,7 +45,7 @@ export async function getCabinPrice(id: number): Promise<TCabinPrice> {
 
 export const getNumCabins = async function (): Promise<number> {
     const { count, error } = await supabaseServer
-        .from("cabins")
+        .from(ProjectTables.Cabins)
         .select(undefined, { count: "exact" });
 
     if (error) {
@@ -53,9 +56,41 @@ export const getNumCabins = async function (): Promise<number> {
     return count ?? 0;
 };
 
+export const getFilteredCabins = async function (
+    filter: CabinsFilter
+): Promise<TCabin[]> {
+    const { capacity } = filter;
+    // sleep for 3 sec
+    const sleep = () =>
+        new Promise((resolve) => {
+            setTimeout(resolve, 3000);
+        });
+
+    await sleep();
+    let query = supabaseServer.from(ProjectTables.Cabins).select("*");
+
+    query =
+        capacity === CabinCapacity.Small
+            ? query.lte("max_capacity", 2)
+            : capacity === CabinCapacity.Medium
+            ? query.gte("max_capacity", 3).lte("max_capacity", 6)
+            : capacity === CabinCapacity.Large
+            ? query.gte("max_capacity", 7)
+            : query;
+
+    const { data, error } = await query;
+
+    if (error) {
+        console.error(error.message);
+        throw error;
+    }
+
+    return data;
+};
+
 export const getCabins = async function (): Promise<TCabin[]> {
     const { data, error } = await supabaseServer
-        .from("cabins")
+        .from(ProjectTables.Cabins)
         .select("id, name, max_capacity, regular_price, discount, image_url")
         .order("name");
 
@@ -70,7 +105,7 @@ export const getCabins = async function (): Promise<TCabin[]> {
 // Guests are uniquely identified by their email address
 export async function getGuest(email: string) {
     const { data, error } = await supabaseServer
-        .from("guests")
+        .from(ProjectTables.Guests)
         .select("*")
         .eq("email", email)
         .single();
@@ -86,7 +121,7 @@ export async function getGuest(email: string) {
 export async function getBooking(id: number) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { data, error, count } = await supabaseServer
-        .from("bookings")
+        .from(ProjectTables.Bookings)
         .select("*")
         .eq("id", id)
         .single();
@@ -102,7 +137,7 @@ export async function getBooking(id: number) {
 export async function getBookings(guest_id: number) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { data, error, count } = await supabaseServer
-        .from("bookings")
+        .from(ProjectTables.Bookings)
         // We actually also need data on the cabins as well. But let's ONLY take the data that we actually need, in order to reduce downloaded data.
         .select(
             "id, created_at, start_date, end_date, number_of_nights, number_of_guests, total_price, guest_id, cabin_id, cabins(name, image_url)"
@@ -125,7 +160,7 @@ export async function getBookedDatesByCabinId(cabin_id: number) {
 
     // Getting all bookings
     const { data, error } = await supabaseServer
-        .from("bookings")
+        .from(ProjectTables.Bookings)
         .select("*")
         .eq("cabin_id", cabin_id)
         .or(`start_date.gte.${today},status.eq.checked-in`);
@@ -150,7 +185,7 @@ export async function getBookedDatesByCabinId(cabin_id: number) {
 
 export async function getSettings() {
     const { data, error } = await supabaseServer
-        .from("settings")
+        .from(ProjectTables.Settings)
         .select("*")
         .single();
 
@@ -177,9 +212,9 @@ export async function getCountries() {
 /////////////
 // CREATE
 
-export async function createGuest(newGuest: Tables<"guests">) {
+export async function createGuest(newGuest: Tables<ProjectTables.Guests>) {
     const { data, error } = await supabaseServer
-        .from("guests")
+        .from(ProjectTables.Guests)
         .insert([newGuest]);
 
     if (error) {
@@ -190,9 +225,11 @@ export async function createGuest(newGuest: Tables<"guests">) {
     return data;
 }
 
-export async function createBooking(newBooking: Tables<"bookings">) {
+export async function createBooking(
+    newBooking: Tables<ProjectTables.Bookings>
+) {
     const { data, error } = await supabaseServer
-        .from("bookings")
+        .from(ProjectTables.Bookings)
         .insert([newBooking])
         // So that the newly created object gets returned!
         .select()
@@ -212,10 +249,10 @@ export async function createBooking(newBooking: Tables<"bookings">) {
 // The updatedFields is an object which should ONLY contain the updated data
 export async function updateGuest(
     id: number,
-    updatedFields: Partial<Tables<"guests">>
+    updatedFields: Partial<Tables<ProjectTables.Guests>>
 ) {
     const { data, error } = await supabaseServer
-        .from("guests")
+        .from(ProjectTables.Guests)
         .update(updatedFields)
         .eq("id", id)
         .select()
@@ -230,10 +267,10 @@ export async function updateGuest(
 
 export async function updateBooking(
     id: number,
-    updatedFields: Partial<Tables<"bookings">>
+    updatedFields: Partial<Tables<ProjectTables.Bookings>>
 ) {
     const { data, error } = await supabaseServer
-        .from("bookings")
+        .from(ProjectTables.Bookings)
         .update(updatedFields)
         .eq("id", id)
         .select()
@@ -251,7 +288,7 @@ export async function updateBooking(
 
 export async function deleteBooking(id: number) {
     const { data, error } = await supabaseServer
-        .from("bookings")
+        .from(ProjectTables.Bookings)
         .delete()
         .eq("id", id);
 

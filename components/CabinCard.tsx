@@ -7,7 +7,7 @@ function CabinCard({ cabin }: { cabin: TCabin }) {
     const { id, name, max_capacity, image_url } = cabin;
     const regular_price = cabin.regular_price ?? 0;
     const discount = cabin.discount ?? 0;
-    console.log({ cabin });
+
     return (
         <div className='flex border-primary-800 border'>
             <Image

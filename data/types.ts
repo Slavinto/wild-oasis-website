@@ -23,3 +23,7 @@ export type TBooking = Pick<
 export type TBookingWithCabin = TBooking & {
     cabins: Pick<Tables<"cabins">, "name" | "image_url">;
 };
+
+export type SearchParams = Promise<{
+    [key: string]: string | string[] | undefined;
+}>;
