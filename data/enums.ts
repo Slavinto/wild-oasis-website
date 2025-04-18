@@ -10,6 +10,13 @@ export enum ProjectTables {
     Guests = "guests",
 }
 
+export enum Headings {
+    H1 = "h1",
+    H2 = "h2",
+    H3 = "h3",
+    H4 = "h4",
+}
+
 // =================Project=========================
 // =================Cabin=========================
 export enum CabinCapacity {
@@ -19,3 +26,10 @@ export enum CabinCapacity {
 }
 
 // =================Cabin=========================
+// =================Booking=========================
+export enum BookingStatus {
+    CheckedIn = "checked-in",
+    CheckedOut = "checked-out",
+    Unconfirmed = "unconfirmed",
+}
+// =================Booking=========================

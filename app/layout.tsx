@@ -2,6 +2,8 @@ import { ReactNode } from "react";
 import { Header } from "@/components";
 import { Josefin_Sans, Figtree } from "next/font/google";
 import "@/styles/globals.css";
+import "react-day-picker/style.css";
+import CabinReservationContextProvider from "@/components/cabinReservation/CabinReservationContextProvider";
 
 export const metadata = {
     title: {
@@ -31,7 +33,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <body className='bg-primary-950 flex flex-col text-primary-100 min-h-screen relative'>
                 <Header />
                 <div className='grid flex-1 px-8 py-12'>
-                    <main className='mx-auto w-full'>{children}</main>
+                    <main className='mx-auto w-full'>
+                        <CabinReservationContextProvider>
+                            {children}
+                        </CabinReservationContextProvider>
+                    </main>
                 </div>
             </body>
         </html>

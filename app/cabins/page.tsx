@@ -1,4 +1,9 @@
-import { CabinsList, CabinCapacityFilter, Spinner } from "@/components";
+import {
+    CabinsList,
+    CabinCapacityFilter,
+    Spinner,
+    ReservationReminder,
+} from "@/components";
 import { cabinPageText } from "@/data/pagesTextContent";
 import { SearchParams } from "@/data/types";
 import { Suspense } from "react";
@@ -26,6 +31,7 @@ export default async function CabinPage({
             </p>
             <CabinCapacityFilter />
             <Suspense key={JSON.stringify(filters)} fallback={<Spinner />}>
+                <ReservationReminder />
                 <CabinsList filters={filters} />
             </Suspense>
         </div>

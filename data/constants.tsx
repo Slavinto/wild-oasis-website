@@ -1,9 +1,10 @@
+import UserAvatar from "@/components/UserAvatar";
 import { HiCalendarDays, HiHome, HiUser } from "react-icons/hi2";
 
 export const navLinks = [
     { path: "/cabins", text: "Cabins" },
     { path: "/about", text: "About" },
-    { path: "/account", text: "Guest area" },
+    { path: "/account", text: "Guest area", icon: <UserAvatar /> },
 ];
 
 export const sidebarLinks = [
@@ -32,3 +33,8 @@ export const supabaseCabinCapacityRanges = {
 
 export const radialGradientAccentBackground =
     "bg-[radial-gradient(circle,_rgba(44,61,79,0.1)_0%,_rgba(75,53,27,0.8)_70%)]";
+
+export const appBooking = {
+    minBookingLength: 1,
+    maxBookingLength: 23,
+};

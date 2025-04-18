@@ -11,14 +11,16 @@ const CabinCapacityFilter = () => {
 
     const { createQueryString, isPending } = useSetSearchParam();
     return (
-        <div className='w-full flex mb-8 justify-between'>
-            <button
-                className='border-primary-800 hover:bg-accent-900 border px-4 py-2'
-                onClick={() => createQueryString("capacity", "")}
-            >
-                Clear
-            </button>
-            <div className='flex gap-4'>
+        <div className='w-full flex mb-8'>
+            {capacityParam && (
+                <button
+                    className='border-primary-800 hover:bg-accent-900 border px-4 py-2'
+                    onClick={() => createQueryString("capacity", "")}
+                >
+                    Clear
+                </button>
+            )}
+            <div className='flex gap-4 ml-auto'>
                 {Object.keys(CabinCapacity).map((capacity) => {
                     const cap = capacity.toLowerCase();
                     const isButtonActive = capacityParam === cap;

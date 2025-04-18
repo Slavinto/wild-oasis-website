@@ -2,16 +2,25 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
+import React, { ReactNode } from "react";
 
-const NavigationLink = ({ path, text }: { path: string; text: string }) => {
+const NavigationLink = ({
+    path,
+    text,
+    icon,
+}: {
+    path: string;
+    text: string;
+    icon?: ReactNode;
+}) => {
     const pathName = usePathname();
 
     return (
-        <li>
+        <li className='flex items-center gap-2 hover:text-accent-400 transition-colors'>
+            {icon && <div className=''>{icon}</div>}
             <Link
                 href={path}
-                className={`hover:text-accent-400 transition-colors ${
+                className={`${
                     path === pathName
                         ? "text-accent-400 pointer-events-none"
                         : ""

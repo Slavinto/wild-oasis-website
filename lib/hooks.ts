@@ -16,7 +16,7 @@ export const useSetSearchParam = () => {
                 params.set(name, value);
             }
             startTransition(() => {
-                router.push(`${pathname}?${params.toString()}`, {
+                router.replace(`${pathname}?${params.toString()}`, {
                     scroll: false,
                 });
             });

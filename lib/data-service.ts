@@ -5,20 +5,20 @@ import { supabaseServer } from "./supabase/server";
 import { Tables } from "@/data/supabaseTypes";
 import { TCabin, TCabinPrice } from "@/data/types";
 import { CabinsFilter } from "@/data/interfaces";
-import { CabinCapacity, ProjectTables } from "@/data/enums";
+import { BookingStatus, CabinCapacity, ProjectTables } from "@/data/enums";
+import { toSupabaseTimestamp } from "./helpers";
 
 /////////////
 // GET
 
-export async function getCabin(id: number) {
+export async function getCabin(
+    id: number
+): Promise<Tables<ProjectTables.Cabins>> {
     const { data, error } = await supabaseServer
         .from(ProjectTables.Cabins)
         .select("*")
         .eq("id", id)
         .single();
-
-    // For testing
-    // await new Promise((res) => setTimeout(res, 1000));
 
     if (error) {
         console.error(error);
@@ -60,13 +60,6 @@ export const getFilteredCabins = async function (
     filter: CabinsFilter
 ): Promise<TCabin[]> {
     const { capacity } = filter;
-    // sleep for 3 sec
-    const sleep = () =>
-        new Promise((resolve) => {
-            setTimeout(resolve, 3000);
-        });
-
-    await sleep();
     let query = supabaseServer.from(ProjectTables.Cabins).select("*");
 
     query =
@@ -154,22 +147,22 @@ export async function getBookings(guest_id: number) {
 }
 
 export async function getBookedDatesByCabinId(cabin_id: number) {
-    let today: Date | string = new Date();
-    today.setUTCHours(0, 0, 0, 0);
-    today = today.toISOString();
+    const today = toSupabaseTimestamp(new Date());
 
-    // Getting all bookings
-    const { data, error } = await supabaseServer
+    // selecting all bookings for this cabin_id
+    const query = supabaseServer
         .from(ProjectTables.Bookings)
         .select("*")
         .eq("cabin_id", cabin_id)
-        .or(`start_date.gte.${today},status.eq.checked-in`);
+        // now selecting those bookings from future including today or with active checked-in status
+        .or(`start_date.gte.${today},status.eq.${BookingStatus.CheckedIn}`);
+
+    const { data, error } = await query;
 
     if (error) {
         console.error(error);
         throw new Error("Bookings could not get loaded");
     }
-
     // Converting to actual dates to be displayed in the date picker
     const bookedDates = data
         .map((booking) => {
@@ -183,7 +176,7 @@ export async function getBookedDatesByCabinId(cabin_id: number) {
     return bookedDates;
 }
 
-export async function getSettings() {
+export async function getSettings(): Promise<Tables<ProjectTables.Settings>> {
     const { data, error } = await supabaseServer
         .from(ProjectTables.Settings)
         .select("*")
