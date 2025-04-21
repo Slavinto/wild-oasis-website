@@ -2,6 +2,10 @@ import { auth } from "@/auth";
 import { Heading, SignInButton } from "@/components";
 import { Headings } from "@/data/enums";
 
+export const metadata = {
+    title: " | Sign in",
+};
+
 export default async function Page() {
     const session = await auth();
     return (

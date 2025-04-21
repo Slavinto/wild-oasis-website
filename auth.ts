@@ -5,7 +5,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     providers: [Google],
     pages: { signIn: "/sign-in" },
     callbacks: {
-        authorized: async ({ auth, request }) => {
+        authorized: async ({ auth }) => {
             return !!auth;
         },
     },
