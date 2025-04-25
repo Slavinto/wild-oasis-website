@@ -1,5 +1,5 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useTransition } from "react";
+import { useCallback, useTransition, useEffect, useRef } from "react";
 
 export const useSetSearchParam = () => {
     const [isPending, startTransition] = useTransition();
@@ -25,4 +25,30 @@ export const useSetSearchParam = () => {
     );
 
     return { createQueryString, isPending };
+};
+
+export const useClickOutside = (
+    handler: () => void,
+    listenCapturing: boolean = true,
+    ignoreClass?: string
+) => {
+    const ref = useRef<HTMLDivElement | HTMLUListElement | null>(null);
+
+    useEffect(() => {
+        const handleClick = (e: MouseEvent) => {
+            if (
+                ref.current &&
+                !ref.current.contains(e.target as Node) &&
+                !(e.target as HTMLElement)?.closest(ignoreClass || "")
+            ) {
+                handler();
+            }
+        };
+        document.addEventListener("click", handleClick, listenCapturing);
+        return () => {
+            document.removeEventListener("click", handleClick, listenCapturing);
+        };
+    }, [handler, ref, listenCapturing, ignoreClass]);
+
+    return { ref };
 };

@@ -26,3 +26,17 @@ export const handleError = (error: unknown) => {
     }
     return new Error(JSON.stringify(error));
 };
+
+export const isValidInput = (value: string | string[]): boolean => {
+    const regex = /^[a-zA-Z0-9\-._~:/?#\[\]@!$&'()*+,;=]{1,30}$/;
+    // console.log(
+    //     !value.find((v) => {
+    //         const test = !regex.test(v);
+    //         console.log({ value });
+    //         console.log(test);
+    //     })
+    // );
+    return typeof value === "string"
+        ? regex.test(value)
+        : !value.find((v) => !regex.test(v));
+};

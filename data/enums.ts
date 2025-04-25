@@ -33,3 +33,8 @@ export enum BookingStatus {
     Unconfirmed = "unconfirmed",
 }
 // =================Booking=========================
+// =================ModalWindows=========================
+export enum ModalWindows {
+    DeleteReservationConfirm = "delete-reservation-confirm",
+}
+// =================ModalWindows=========================

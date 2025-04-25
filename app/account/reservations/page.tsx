@@ -1,21 +1,30 @@
-import { ReservationCard } from "@/components";
-import { TBookingWithCabin } from "@/data/types";
+import { auth } from "@/auth";
+import { Heading, ReservationCard } from "@/components";
+import { Headings } from "@/data/enums";
+import { getBookings } from "@/lib/data-service";
 import Link from "next/link";
-import React from "react";
+import { redirect } from "next/navigation";
 
 export const metadata = {
     title: " | Reservations",
 };
 
-const ReservationsPage = () => {
+const ReservationsPage = async () => {
     // CHANGE
-    const bookings: TBookingWithCabin[] = [];
+    const session = await auth();
+
+    if (!session || !session?.user || !session.user.id) {
+        redirect("/sign-in");
+    }
+    const { id } = session.user;
+    const bookings = await getBookings(Number(id));
+    console.log({ bookings });
 
     return (
         <div>
-            <h2 className='font-semibold text-2xl text-accent-400 mb-7'>
+            <Heading as={Headings.H3} classNames='text-accent-400 mb-7'>
                 Your reservations
-            </h2>
+            </Heading>
 
             {bookings.length === 0 ? (
                 <p className='text-lg'>

@@ -3,8 +3,8 @@ import { notFound } from "next/navigation";
 
 import { supabaseServer } from "./supabase/server";
 import { Tables } from "@/data/supabaseTypes";
-import { TCabin, TCabinPrice } from "@/data/types";
-import { CabinsFilter } from "@/data/interfaces";
+import { TBookingWithCabin, TCabin, TCabinPrice } from "@/data/types";
+import { AuthGuest, CabinsFilter } from "@/data/interfaces";
 import { BookingStatus, CabinCapacity, ProjectTables } from "@/data/enums";
 import { toSupabaseTimestamp } from "./helpers";
 
@@ -96,7 +96,9 @@ export const getCabins = async function (): Promise<TCabin[]> {
 };
 
 // Guests are uniquely identified by their email address
-export async function getGuest(email: string) {
+export async function getGuest(
+    email: string
+): Promise<Tables<ProjectTables.Guests> | null> {
     const { data, error } = await supabaseServer
         .from(ProjectTables.Guests)
         .select("*")
@@ -105,7 +107,7 @@ export async function getGuest(email: string) {
 
     if (error) {
         console.error(error.message);
-        throw new Error("Failed to load guest data");
+        return null;
     }
     // No error here! We handle the possibility of no guest in the sign in callback
     return data;
@@ -133,7 +135,7 @@ export async function getBookings(guest_id: number) {
         .from(ProjectTables.Bookings)
         // We actually also need data on the cabins as well. But let's ONLY take the data that we actually need, in order to reduce downloaded data.
         .select(
-            "id, created_at, start_date, end_date, number_of_nights, number_of_guests, total_price, guest_id, cabin_id, cabins(name, image_url)"
+            "id, created_at, start_date, end_date, number_of_nights, number_of_guests, status, total_price, guest_id, cabin_id, cabins(name, image_url)"
         )
         .eq("guest_id", guest_id)
         .order("start_date");
@@ -205,10 +207,11 @@ export async function getCountries() {
 /////////////
 // CREATE
 
-export async function createGuest(newGuest: Tables<ProjectTables.Guests>) {
+export async function createGuest(newGuest: AuthGuest) {
     const { data, error } = await supabaseServer
         .from(ProjectTables.Guests)
-        .insert([newGuest]);
+        .insert({ full_name: newGuest.name, email: newGuest.email })
+        .select();
 
     if (error) {
         console.error(error);

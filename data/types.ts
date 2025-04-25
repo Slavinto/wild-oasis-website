@@ -1,14 +1,19 @@
+import { ModalWindows, ProjectTables } from "./enums";
+import { ModalConfig } from "./interfaces";
 import { Tables } from "./supabaseTypes";
 
 export type TCabin = Pick<
-    Tables<"cabins">,
+    Tables<ProjectTables.Cabins>,
     "id" | "name" | "max_capacity" | "regular_price" | "discount" | "image_url"
 >;
 
-export type TCabinPrice = Pick<Tables<"cabins">, "regular_price" | "discount">;
+export type TCabinPrice = Pick<
+    Tables<ProjectTables.Cabins>,
+    "regular_price" | "discount"
+>;
 
 export type TBooking = Pick<
-    Tables<"bookings">,
+    Tables<ProjectTables.Bookings>,
     | "id"
     | "guest_id"
     | "start_date"
@@ -20,10 +25,17 @@ export type TBooking = Pick<
     | "created_at"
 >;
 
+export type TCabinBooking = Pick<
+    Tables<ProjectTables.Cabins>,
+    "name" | "image_url"
+>;
+
 export type TBookingWithCabin = TBooking & {
-    cabins: Pick<Tables<"cabins">, "name" | "image_url">;
+    cabins: TCabinBooking;
 };
 
 export type SearchParams = Promise<{
     [key: string]: string | string[] | undefined;
 }>;
+
+export type ModalConfigProps = Record<ModalWindows, ModalConfig>;

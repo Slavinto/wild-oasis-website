@@ -14,6 +14,7 @@ export const metadata = {
         "Luxurious cabin hotel, located in the heart of Italian Dolomites, surrounded by beautiful mountains and dark forests",
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const josefin = Josefin_Sans({
     subsets: ["latin"],
     display: "swap",
@@ -25,9 +26,11 @@ const figtree = Figtree({
     display: "swap",
 });
 
-console.log({ josefin });
-
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({
+    children,
+}: {
+    children: ReactNode;
+}) {
     return (
         <html lang='en' className='font-primary'>
             <body className='bg-primary-950 flex flex-col text-primary-100 min-h-screen relative'>

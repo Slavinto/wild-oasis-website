@@ -1,12 +1,16 @@
+import { deleteReservation } from "@/lib/actions";
 import { HiOutlineTrash } from "react-icons/hi2";
+import ModalButton from "./modal/ModalButton";
 
 function DeleteReservation({ bookingId }: { bookingId: number }) {
-    console.log({ bookingId });
     return (
-        <button className='group flex items-center gap-2 uppercase text-xs font-bold text-primary-300 flex-grow px-3 hover:bg-accent-600 transition-colors hover:text-primary-900'>
-            <HiOutlineTrash className='h-5 w-5 text-primary-600 group-hover:text-primary-800 transition-colors' />
-            <span className='mt-1'>Delete</span>
-        </button>
+        <form
+            action={deleteReservation}
+            className='flex items-center justify-center h-1/2'
+        >
+            <input type='hidden' value={bookingId} name='bookingId' />
+            <ModalButton buttonText='Delete' icon={<HiOutlineTrash />} />
+        </form>
     );
 }
 

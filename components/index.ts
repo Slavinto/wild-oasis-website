@@ -4,6 +4,7 @@ export { default as CabinDetails } from "./cabinReservation/CabinDetails";
 export { default as CabinsList } from "./CabinsList";
 export { default as DateSelector } from "./cabinReservation/DateSelector";
 export { default as DeleteReservation } from "./DeleteReservation";
+export { default as FormSubmitButton } from "./FormSubmitButton";
 export { default as GuestProfileForm } from "./GuestProfileForm";
 export { default as Header } from "./Header";
 export { default as Heading } from "./Heading";

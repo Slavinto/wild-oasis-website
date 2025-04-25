@@ -17,7 +17,7 @@ const Heading = ({
     ) : as === Headings.H3 ? (
         <h3 className={`text-3xl font-semibold ${classNames}`}>{children}</h3>
     ) : as === Headings.H4 ? (
-        <h4 className={` ${classNames}`}>{children}</h4>
+        <h4 className={`text-xl font-semibold ${classNames}`}>{children}</h4>
     ) : null;
 };
 

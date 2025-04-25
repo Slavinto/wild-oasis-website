@@ -2,8 +2,13 @@ import Image from "next/image";
 import { format, formatDistance, isPast, isToday, parseISO } from "date-fns";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
 
-import { DeleteReservation } from "@/components";
+import { DeleteReservation, Heading } from "@/components";
 import { TBookingWithCabin } from "@/data/types";
+import { Headings, ModalWindows } from "@/data/enums";
+import Link from "next/link";
+import ModalLayout from "./modal/ModalLayout";
+import { modalConfigs } from "@/data/constants";
+import ModalButton from "./modal/ModalButton";
 
 export const formatDistanceFromNow = (dateStr: string) =>
     formatDistance(parseISO(dateStr), new Date(), {
@@ -30,15 +35,16 @@ function ReservationCard({ booking }: { booking: TBookingWithCabin }) {
                 <Image
                     src={image_url || ""}
                     alt={`Cabin ${name}`}
+                    fill
                     className='object-cover border-r border-primary-800'
                 />
             </div>
 
             <div className='flex-grow px-6 py-3 flex flex-col'>
                 <div className='flex items-center justify-between'>
-                    <h3 className='text-xl font-semibold'>
+                    <Heading as={Headings.H4}>
                         {number_of_nights} nights in Cabin {name}
-                    </h3>
+                    </Heading>
                     {isPast(new Date(start_date || "")) ? (
                         <span className='bg-yellow-800 text-yellow-200 h-7 px-3 uppercase text-xs font-bold flex items-center rounded-sm'>
                             past
@@ -75,15 +81,32 @@ function ReservationCard({ booking }: { booking: TBookingWithCabin }) {
                 </div>
             </div>
 
-            <div className='flex flex-col border-l border-primary-800 w-[100px]'>
-                <a
-                    href={`/account/reservations/edit/${id}`}
-                    className='group flex items-center gap-2 uppercase text-xs font-bold text-primary-300 border-b border-primary-800 flex-grow px-3 hover:bg-accent-600 transition-colors hover:text-primary-900'
-                >
-                    <HiOutlinePencilSquare className='h-5 w-5 text-primary-600 group-hover:text-primary-800 transition-colors' />
-                    <span className='mt-1'>Edit</span>
-                </a>
-                <DeleteReservation bookingId={id} />
+            <div className='flex flex-col justify-between border-l border-primary-800 w-[100px]'>
+                {isPast(start_date || "") ? (
+                    <></>
+                ) : (
+                    <>
+                        <Link
+                            href={`/account/reservations/edit/${id}`}
+                            className='group flex items-center gap-2 uppercase text-xs font-bold text-primary-300 border-b border-primary-800 flex-grow px-3 hover:bg-accent-600 transition-colors hover:text-primary-900'
+                        >
+                            <HiOutlinePencilSquare className='h-5 w-5 text-primary-600 group-hover:text-primary-800 transition-colors' />
+                            <span className='mt-1'>Edit</span>
+                        </Link>
+                        <ModalLayout
+                            config={
+                                modalConfigs[
+                                    ModalWindows.DeleteReservationConfirm
+                                ]
+                            }
+                        >
+                            <>
+                                <DeleteReservation bookingId={Number(id)} />
+                                <ModalButton buttonText='Cancel' />
+                            </>
+                        </ModalLayout>
+                    </>
+                )}
             </div>
         </div>
     );
