@@ -144,8 +144,10 @@ export async function getBookings(guest_id: number) {
         console.error(error);
         throw new Error("Bookings could not get loaded");
     }
-
-    return data;
+    // had to do this because auto-exported supabase types expect
+    // cabins to be an array but supabase itself returns an object
+    // because there's only one returned cabin object here
+    return data as unknown as TBookingWithCabin[];
 }
 
 export async function getBookedDatesByCabinId(cabin_id: number) {

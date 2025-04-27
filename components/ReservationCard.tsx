@@ -8,7 +8,6 @@ import { Headings, ModalWindows } from "@/data/enums";
 import Link from "next/link";
 import ModalLayout from "./modal/ModalLayout";
 import { modalConfigs } from "@/data/constants";
-import ModalButton from "./modal/ModalButton";
 
 export const formatDistanceFromNow = (dateStr: string) =>
     formatDistance(parseISO(dateStr), new Date(), {
@@ -28,7 +27,6 @@ function ReservationCard({ booking }: { booking: TBookingWithCabin }) {
         created_at,
         cabins: { name, image_url },
     } = booking;
-
     return (
         <div className='flex border border-primary-800'>
             <div className='relative h-32 aspect-square'>
@@ -81,31 +79,31 @@ function ReservationCard({ booking }: { booking: TBookingWithCabin }) {
                 </div>
             </div>
 
-            <div className='flex flex-col justify-between border-l border-primary-800 w-[100px]'>
+            <div className='flex'>
                 {isPast(start_date || "") ? (
                     <></>
                 ) : (
-                    <>
+                    <div className='flex flex-col w-full h-full border-primary-800 border-l'>
                         <Link
                             href={`/account/reservations/edit/${id}`}
-                            className='group flex items-center gap-2 uppercase text-xs font-bold text-primary-300 border-b border-primary-800 flex-grow px-3 hover:bg-accent-600 transition-colors hover:text-primary-900'
+                            className='max-h-1/2 group flex flex-grow items-center gap-2 uppercase text-xs font-bold text-primary-300 px-3 hover:bg-accent-600 transition-colors hover:text-primary-900'
                         >
                             <HiOutlinePencilSquare className='h-5 w-5 text-primary-600 group-hover:text-primary-800 transition-colors' />
                             <span className='mt-1'>Edit</span>
                         </Link>
-                        <ModalLayout
-                            config={
-                                modalConfigs[
-                                    ModalWindows.DeleteReservationConfirm
-                                ]
-                            }
-                        >
-                            <>
+                        <div className='max-h-1/2 flex-grow flex !border-0 !border-t border-primary-800 items-center'>
+                            <ModalLayout
+                                config={
+                                    modalConfigs[
+                                        ModalWindows.DeleteReservationConfirm
+                                    ]
+                                }
+                            >
                                 <DeleteReservation bookingId={Number(id)} />
-                                <ModalButton buttonText='Cancel' />
-                            </>
-                        </ModalLayout>
-                    </>
+                                {/* <ModalButton buttonText='Cancel' /> */}
+                            </ModalLayout>
+                        </div>
+                    </div>
                 )}
             </div>
         </div>

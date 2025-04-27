@@ -4,8 +4,7 @@ import React, { FC, ReactElement } from "react";
 import Modal from "./Modal";
 import ModalButton from "./ModalButton";
 import { ModalConfig } from "@/data/interfaces";
-import Heading from "../Heading";
-import { Headings } from "@/data/enums";
+import ModalContentWrapper from "./ModalContentWrapper";
 
 interface ModalLayoutProps {
     config: ModalConfig;
@@ -17,15 +16,17 @@ const ModalLayout: FC<ModalLayoutProps> = ({ config, children }) => {
     return (
         <Modal>
             <Modal.Open opens={windowName}>
-                <ModalButton icon={icon} buttonText={buttonText} />
+                {/* this is shown in the ReservationCard */}
+                <ModalButton
+                    icon={icon}
+                    buttonText={buttonText}
+                    classNames='text-primary-300 border-0 border-primary-800'
+                />
             </Modal.Open>
             <Modal.Window name={windowName}>
-                <div className='flex flex-col'>
-                    <Heading as={Headings.H4} classNames='py-8 text-accent-300'>
-                        {descriptionText}
-                    </Heading>
-                    <div className='flex justify-around w-full'>{children}</div>
-                </div>
+                <ModalContentWrapper descriptionText={descriptionText}>
+                    {children}
+                </ModalContentWrapper>
             </Modal.Window>
         </Modal>
     );

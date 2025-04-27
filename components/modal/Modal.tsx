@@ -38,7 +38,6 @@ const Open = ({
     children: ReactElement<{ onClick: React.MouseEventHandler }>;
     opens: ModalWindows;
 }) => {
-    console.log("first");
     const { open } = useContext(ModalContext);
 
     return cloneElement(children, {

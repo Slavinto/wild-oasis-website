@@ -18,7 +18,6 @@ const ReservationsPage = async () => {
     }
     const { id } = session.user;
     const bookings = await getBookings(Number(id));
-    console.log({ bookings });
 
     return (
         <div>
