@@ -60,7 +60,7 @@ const Window = ({
     if (name !== openWindowName) return null;
 
     // attaching close handler
-    // @ts-expect-error test
+    // @ts-expect-error / no such prop
     const nestedContent = cloneElement(children, { onCloseModal: close });
 
     return createPortal(
@@ -70,7 +70,7 @@ const Window = ({
                 classNames='modal-content'
             >
                 <ModalButton
-                    classNames='!p-0 !absolute !top-8 !right-8'
+                    classNames='!p-0 absolute top-8 right-8 !h-7'
                     icon={<HiXMark size={25} />}
                     onClick={close}
                 />

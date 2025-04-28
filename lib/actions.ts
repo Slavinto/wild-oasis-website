@@ -1,7 +1,9 @@
 "use server";
 import { auth, signIn, signOut } from "@/auth";
+import { isPast } from "date-fns";
+
 import { isValidInput } from "./helpers";
-import { updateGuest } from "./data-service";
+import { deleteBooking, getBooking, updateGuest } from "./data-service";
 import { revalidatePath } from "next/cache";
 
 export async function updateProfile(formData: FormData) {
@@ -44,5 +46,19 @@ export async function signOutUser() {
 }
 
 export async function deleteReservation(formData: FormData) {
-    console.log(formData.get("bookingId"));
+    const id = Number(formData.get("bookingId"));
+    const session = await auth();
+    // check that reservation isn't started or haven't passed
+    const booking = await getBooking(id);
+    console.log(session?.user?.id, booking.guest_id);
+    if (
+        Number(session?.user?.id) === Number(booking.guest_id) &&
+        booking.start_date &&
+        !isPast(new Date(booking.start_date))
+    ) {
+        await deleteBooking(id);
+        revalidatePath("/account/reservations");
+    } else {
+        throw new Error(`Failed to delete booking ${id}. Action not allowed`);
+    }
 }

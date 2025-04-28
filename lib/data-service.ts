@@ -113,7 +113,9 @@ export async function getGuest(
     return data;
 }
 
-export async function getBooking(id: number) {
+export async function getBooking(
+    id: number
+): Promise<Tables<ProjectTables.Bookings>> {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { data, error, count } = await supabaseServer
         .from(ProjectTables.Bookings)
