@@ -1,6 +1,6 @@
 import { sidebarLinks } from "@/data/constants";
 import SignOutButton from "./SignOutButton";
-import SidebarLink from "./SidebarLink";
+import SidebarLink from "../client/SidebarLink";
 
 function SideNavigation() {
     return (

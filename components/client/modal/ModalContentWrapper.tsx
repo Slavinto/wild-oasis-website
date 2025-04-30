@@ -1,7 +1,7 @@
 "use client";
 
 import React, { FC, ReactNode } from "react";
-import Heading from "../Heading";
+import Heading from "../../server/Heading";
 import { Headings } from "@/data/enums";
 import ModalButton from "./ModalButton";
 

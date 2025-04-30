@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
-import { Heading, ReservationCard } from "@/components";
+import { Heading } from "@/components/server";
+import { ReservationList } from "@/components/client";
 import { Headings } from "@/data/enums";
 import { getBookings } from "@/lib/data-service";
 import Link from "next/link";
@@ -10,7 +11,6 @@ export const metadata = {
 };
 
 const ReservationsPage = async () => {
-    // CHANGE
     const session = await auth();
 
     if (!session || !session?.user || !session.user.id) {
@@ -33,11 +33,7 @@ const ReservationsPage = async () => {
                     </Link>
                 </p>
             ) : (
-                <ul className='space-y-6'>
-                    {bookings.map((booking) => (
-                        <ReservationCard booking={booking} key={booking.id} />
-                    ))}
-                </ul>
+                <ReservationList bookings={bookings} />
             )}
         </div>
     );

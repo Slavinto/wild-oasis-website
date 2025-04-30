@@ -1,4 +1,4 @@
-import UserAvatar from "@/components/UserAvatar";
+import UserAvatar from "@/components/server/UserAvatar";
 import {
     HiCalendarDays,
     HiHome,
@@ -6,7 +6,7 @@ import {
     HiUser,
 } from "react-icons/hi2";
 import { ModalWindows } from "./enums";
-import { DeleteReservation } from "@/components";
+import { DeleteReservation } from "@/components/client";
 import { ModalConfigProps } from "./types";
 
 export const navLinks = [

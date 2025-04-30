@@ -1,5 +1,5 @@
-import Navigation from "@/components/Navigation";
-import Logo from "@/components/Logo";
+import Navigation from "@/components/server/Navigation";
+import Logo from "@/components/server/Logo";
 
 function Header() {
     return (

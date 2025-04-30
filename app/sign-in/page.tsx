@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import { Heading, SignInButton } from "@/components";
+import { Heading, SignInButton } from "@/components/server";
 import { Headings } from "@/data/enums";
 
 export const metadata = {

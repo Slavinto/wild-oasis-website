@@ -1,20 +1,25 @@
-import Image from "next/image";
-import { format, formatDistance, isPast, isToday, parseISO } from "date-fns";
-import { HiOutlinePencilSquare } from "react-icons/hi2";
+"use client";
 
-import { DeleteReservation, Heading } from "@/components";
+import Image from "next/image";
+import { format, isPast, isToday } from "date-fns";
+import { HiOutlinePencilSquare, HiOutlineTrash } from "react-icons/hi2";
+
+import Heading from "@/components/server/Heading";
 import { TBookingWithCabin } from "@/data/types";
 import { Headings, ModalWindows } from "@/data/enums";
 import Link from "next/link";
 import ModalLayout from "./modal/ModalLayout";
 import { modalConfigs } from "@/data/constants";
+import { formatDistanceFromNow } from "@/lib/helpers";
+import ModalButton from "./modal/ModalButton";
 
-export const formatDistanceFromNow = (dateStr: string) =>
-    formatDistance(parseISO(dateStr), new Date(), {
-        addSuffix: true,
-    }).replace("about ", "");
-
-function ReservationCard({ booking }: { booking: TBookingWithCabin }) {
+function ReservationCard({
+    booking,
+    onDelete,
+}: {
+    booking: TBookingWithCabin;
+    onDelete: (reservationId: number) => void;
+}) {
     const {
         id,
         // guest_id,
@@ -62,7 +67,6 @@ function ReservationCard({ booking }: { booking: TBookingWithCabin }) {
                     ) &mdash;{" "}
                     {format(new Date(end_date || ""), "EEE, MMM dd yyyy")}
                 </p>
-
                 <div className='flex gap-5 mt-auto items-baseline'>
                     <p className='text-xl font-semibold text-accent-400'>
                         ${total_price}
@@ -86,7 +90,7 @@ function ReservationCard({ booking }: { booking: TBookingWithCabin }) {
                     <div className='flex flex-col w-full h-full border-primary-800 border-l'>
                         <Link
                             href={`/account/reservations/edit/${id}`}
-                            className='max-h-1/2 group flex flex-grow items-center gap-2 uppercase text-xs font-bold text-primary-300 px-3 hover:bg-accent-600 transition-colors hover:text-primary-900'
+                            className='max-h-1/2 group flex flex-grow items-center justify-start px-8 gap-2 uppercase text-xs font-bold text-primary-300 hover:bg-accent-600 transition-colors hover:text-primary-900'
                         >
                             <HiOutlinePencilSquare className='h-5 w-5 text-primary-600 group-hover:text-primary-800 transition-colors' />
                             <span className='mt-1'>Edit</span>
@@ -99,8 +103,11 @@ function ReservationCard({ booking }: { booking: TBookingWithCabin }) {
                                     ]
                                 }
                             >
-                                <DeleteReservation bookingId={Number(id)} />
-                                {/* <ModalButton buttonText='Cancel' /> */}
+                                <ModalButton
+                                    onClick={() => onDelete(Number(id))}
+                                    buttonText='Delete'
+                                    icon={<HiOutlineTrash />}
+                                />
                             </ModalLayout>
                         </div>
                     </div>

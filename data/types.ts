@@ -19,6 +19,7 @@ export type TBooking = Pick<
     | "start_date"
     | "end_date"
     | "number_of_nights"
+    | "observations"
     | "total_price"
     | "number_of_guests"
     | "status"
@@ -27,7 +28,7 @@ export type TBooking = Pick<
 
 export type TCabinBooking = Pick<
     Tables<ProjectTables.Cabins>,
-    "name" | "image_url"
+    "name" | "image_url" | "max_capacity"
 >;
 
 export type TBookingWithCabin = TBooking & {

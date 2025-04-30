@@ -1,3 +1,5 @@
+import { formatDistance, parseISO } from "date-fns";
+
 export const sleep = async (ms: number) => {
     console.log("suspending");
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -40,3 +42,8 @@ export const isValidInput = (value: string | string[]): boolean => {
         ? regex.test(value)
         : !value.find((v) => !regex.test(v));
 };
+
+export const formatDistanceFromNow = (dateStr: string) =>
+    formatDistance(parseISO(dateStr), new Date(), {
+        addSuffix: true,
+    }).replace("about ", "");

@@ -20,7 +20,7 @@ const ModalLayout: FC<ModalLayoutProps> = ({ config, children }) => {
                 <ModalButton
                     icon={icon}
                     buttonText={buttonText}
-                    classNames='text-primary-300 border-0 border-primary-800'
+                    classNames='justify-center text-primary-300 border-0 border-primary-800'
                 />
             </Modal.Open>
             <Modal.Window name={windowName}>

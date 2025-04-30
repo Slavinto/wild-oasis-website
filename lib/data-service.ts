@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { supabaseServer } from "./supabase/server";
 import { Tables } from "@/data/supabaseTypes";
 import { TBookingWithCabin, TCabin, TCabinPrice } from "@/data/types";
-import { AuthGuest, CabinsFilter } from "@/data/interfaces";
+import { AuthGuest, CabinsFilter, IBooking } from "@/data/interfaces";
 import { BookingStatus, CabinCapacity, ProjectTables } from "@/data/enums";
 import { toSupabaseTimestamp } from "./helpers";
 
@@ -131,6 +131,27 @@ export async function getBooking(
     return data;
 }
 
+export async function getBookingWithCabin(
+    bookingId: number
+): Promise<TBookingWithCabin> {
+    const { data, error } = await supabaseServer
+        .from(ProjectTables.Bookings)
+        .select(
+            "id, created_at, start_date, end_date, number_of_nights, number_of_guests, status, total_price, guest_id, observations, cabin_id, cabins(name, image_url, max_capacity)"
+        )
+        .eq("id", bookingId)
+        .single();
+
+    if (error) {
+        console.error(error);
+        throw new Error("Bookings could not get loaded");
+    }
+    // had to do this because auto-exported supabase types expect
+    // cabins to be an array but supabase itself returns an object
+    // because there's only one returned cabin object here
+    return data as unknown as TBookingWithCabin;
+}
+
 export async function getBookings(guest_id: number) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { data, error, count } = await supabaseServer
@@ -144,8 +165,9 @@ export async function getBookings(guest_id: number) {
 
     if (error) {
         console.error(error);
-        throw new Error("Bookings could not get loaded");
+        throw new Error("Failed to load bookings");
     }
+
     // had to do this because auto-exported supabase types expect
     // cabins to be an array but supabase itself returns an object
     // because there's only one returned cabin object here
@@ -225,9 +247,7 @@ export async function createGuest(newGuest: AuthGuest) {
     return data;
 }
 
-export async function createBooking(
-    newBooking: Tables<ProjectTables.Bookings>
-) {
+export async function createBooking(newBooking: IBooking) {
     const { data, error } = await supabaseServer
         .from(ProjectTables.Bookings)
         .insert([newBooking])
@@ -266,13 +286,15 @@ export async function updateGuest(
 }
 
 export async function updateBooking(
-    id: number,
+    bookingId: number,
     updatedFields: Partial<Tables<ProjectTables.Bookings>>
 ) {
+    console.log({ bookingId });
+    console.log({ updatedFields });
     const { data, error } = await supabaseServer
         .from(ProjectTables.Bookings)
         .update(updatedFields)
-        .eq("id", id)
+        .eq("id", bookingId)
         .select()
         .single();
 

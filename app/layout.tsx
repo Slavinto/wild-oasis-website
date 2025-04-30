@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Header } from "@/components";
+import { Header } from "@/components/server";
 import { Josefin_Sans, Figtree } from "next/font/google";
 import "@/styles/globals.css";
 import "react-day-picker/style.css";

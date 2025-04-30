@@ -1,9 +1,7 @@
-import {
-    CabinsList,
-    CabinCapacityFilter,
-    Spinner,
-    ReservationReminder,
-} from "@/components";
+import { CabinsList, Spinner } from "@/components/server";
+import { CabinCapacityFilter } from "@/components/client";
+import ReservationReminder from "@/components/cabinReservation/ReservationReminder";
+
 import { cabinPageText } from "@/data/pagesTextContent";
 import { SearchParams } from "@/data/types";
 import { Suspense } from "react";

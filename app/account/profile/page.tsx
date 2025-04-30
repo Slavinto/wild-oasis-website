@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
-import { GuestProfileForm, Heading, SelectCountry } from "@/components";
+import { Heading, SelectCountry } from "@/components/server";
+import { GuestProfileForm } from "@/components/client";
 import { Headings } from "@/data/enums";
 import { getGuest } from "@/lib/data-service";
 

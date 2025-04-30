@@ -1,13 +1,14 @@
-import { Suspense } from "react";
+import { FC, Suspense } from "react";
 
-import { CabinDetails, ReserveCabin, Spinner } from "@/components";
+import { ReserveCabin, Spinner } from "@/components/server";
+import CabinDetails from "@/components/cabinReservation/CabinDetails";
 import { getCabin, getCabins } from "@/lib/data-service";
 
-export async function generateMetadata({
-    params,
-}: {
+interface CabinPageProps {
     params: Promise<{ id: string }>;
-}) {
+}
+
+export async function generateMetadata({ params }: CabinPageProps) {
     const { id } = await params;
 
     return { title: ` | Cabin ${id} details` };
@@ -18,11 +19,7 @@ export async function generateStaticParams() {
     return cabins.map((cabin) => ({ id: cabin.id.toString() }));
 }
 
-export default async function CabinPage({
-    params,
-}: {
-    params: Promise<{ id: string }>;
-}) {
+const CabinPage: FC<CabinPageProps> = async ({ params }) => {
     const { id } = await params;
     const cabin = await getCabin(Number(id));
 
@@ -34,4 +31,6 @@ export default async function CabinPage({
             </Suspense>
         </div>
     );
-}
+};
+
+export default CabinPage;

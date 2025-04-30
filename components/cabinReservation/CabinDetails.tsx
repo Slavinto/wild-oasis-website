@@ -1,9 +1,9 @@
+import Image from "next/image";
 import { Headings, ProjectEntities, ProjectTables } from "@/data/enums";
 import { Tables } from "@/data/supabaseTypes";
-import Image from "next/image";
-import TextExpander from "../TextExpander";
+import Heading from "../server/Heading";
+import TextExpander from "../client/TextExpander";
 import { HiEyeSlash, HiMapPin, HiUsers } from "react-icons/hi2";
-import Heading from "../Heading";
 
 const CabinDetails = ({ cabin }: { cabin: Tables<ProjectTables.Cabins> }) => {
     const {

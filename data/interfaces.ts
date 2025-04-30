@@ -1,5 +1,5 @@
 import { ReactElement, ReactNode } from "react";
-import { CabinCapacity, ModalWindows } from "./enums";
+import { BookingStatus, CabinCapacity, ModalWindows } from "./enums";
 
 export interface ICountry {
     name: string;
@@ -16,11 +16,24 @@ export interface ICabin {
     id: string;
 }
 // ======================Cabins==============================
+// ======================Bookings==============================
 
 export interface IBooking {
-    id: string;
+    start_date: string;
+    end_date: string;
+    number_of_nights: number;
+    number_of_guests: number;
+    cabin_price: number;
+    extras_price: number;
+    total_price: number;
+    status: BookingStatus;
+    has_breakfast: boolean;
+    is_paid: boolean;
+    observations: string;
+    cabin_id: number;
+    guest_id: number;
 }
-// ======================Cabins==============================
+// ======================Bookings==============================
 // ======================Guests==============================
 
 // interface for creating a supabase guest entry from AuthJs user

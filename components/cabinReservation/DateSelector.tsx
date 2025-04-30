@@ -3,7 +3,12 @@
 import { appBooking } from "@/data/constants";
 import { ProjectTables } from "@/data/enums";
 import { Tables } from "@/data/supabaseTypes";
-// import { isWithinInterval } from "date-fns";
+import {
+    differenceInDays,
+    isPast,
+    isSameDay,
+    isWithinInterval,
+} from "date-fns";
 import { DateRange, DayPicker } from "react-day-picker";
 import {
     initialReservationState,
@@ -11,41 +16,36 @@ import {
 } from "./CabinReservationContext";
 // import "react-day-picker/dist/style.css";
 
-// function isAlreadyBooked(range, datesArr) {
-//     return (
-//         range.from &&
-//         range.to &&
-//         datesArr.some((date) =>
-//             isWithinInterval(date, { start: range.from, end: range.to })
-//         )
-//     );
-// }
+function isAlreadyBooked(range, datesArr) {
+    return (
+        range.from &&
+        range.to &&
+        datesArr.some((date) =>
+            isWithinInterval(date, { start: range.from, end: range.to })
+        )
+    );
+}
 
 function DateSelector({
     cabin,
     dates,
-}: // settings,
-{
+    settings,
+}: {
     cabin: Tables<ProjectTables.Cabins>;
     dates: (string | Date)[];
     settings: Tables<ProjectTables.Settings>;
 }) {
     const { range, setRange } = useCabinReservationContext();
-    // CHANGE
+    const displayRange = isAlreadyBooked(range, dates)
+        ? initialReservationState
+        : range;
     const regularPrice = cabin.regular_price ?? 0;
     const discount = cabin.discount ?? 0;
-    // const selectedFrom = selectedRange?.from - selectedRange?.to;
-    // console.log({ selectedFrom });
     const numNights =
-        range && range.from && range.to
-            ? Math.ceil(
-                  // @ts-expect-error test
-                  Math.abs(range.from - range.to) / (1000 * 60 * 60 * 24)
-              )
+        displayRange?.from && displayRange.to
+            ? Math.abs(differenceInDays(displayRange.from, displayRange.to))
             : 0;
-    const cabinPrice = regularPrice - discount;
-    console.log({ numNights });
-    console.log({ range });
+    const cabinPrice = (regularPrice - discount) * numNights;
 
     const resetRange = () => {
         setRange?.(initialReservationState);
@@ -74,11 +74,14 @@ function DateSelector({
                 mode='range'
                 min={appBooking.minBookingLength + 1}
                 max={appBooking.maxBookingLength}
-                selected={range as DateRange}
+                selected={displayRange as DateRange}
                 onSelect={setRange}
-                // disabled={range as DateRange}
-                startMonth={new Date()}
-                hidden={{ before: new Date() }}
+                disabled={(curDate) =>
+                    isPast(curDate) ||
+                    dates.some((date) => isSameDay(date, curDate))
+                }
+                // startMonth={new Date()}
+                // hidden={{ before: new Date() }}
                 // toDate={}
                 endMonth={new Date(new Date().getFullYear(), 8)}
                 captionLayout='dropdown'
@@ -121,7 +124,7 @@ function DateSelector({
 
                 {range?.from || range?.to ? (
                     <button
-                        className='border border-primary-800 py-2 px-4 text-sm font-semibold invisible'
+                        className='border border-primary-800 py-2 px-4 text-sm font-semibold'
                         onClick={resetRange}
                     >
                         Clear

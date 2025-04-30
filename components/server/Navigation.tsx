@@ -1,5 +1,5 @@
 import { navLinks } from "@/data/constants";
-import NavigationLink from "./NavigationLink";
+import NavigationLink from "../client/NavigationLink";
 import { auth } from "@/auth";
 
 export default async function Navigation() {

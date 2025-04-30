@@ -1,4 +1,4 @@
-import { SideNavigation } from "@/components";
+import { SideNavigation } from "@/components/server";
 import React, { ReactNode } from "react";
 
 const AccountLayout = ({ children }: { children: ReactNode }) => {

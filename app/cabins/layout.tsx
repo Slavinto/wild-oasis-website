@@ -1,4 +1,4 @@
-import { Spinner } from "@/components";
+import { Spinner } from "@/components/server";
 import React, { ReactNode } from "react";
 
 const CabinsLayout = ({
